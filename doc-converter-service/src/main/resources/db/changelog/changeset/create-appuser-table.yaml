@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-appuser
+      author: Konstantin
+      changes:
+        - createTable:
+            tableName: app_user
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: email
+                  type: varchar(200)
+                  constraints:
+                    unique: true
+              - column:
+                  name: telegram_user_name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: telegram_user_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: firstname
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lastname
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: is_active
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: state
+                  type: varchar(25)
+                  constraints:
+                    nullable: false
+
+
