@@ -1,9 +1,8 @@
 package com.petproject.service.impl;
 
-import com.petproject.dao.AppUserDao;
 import com.petproject.entity.AppUser;
 import com.petproject.entity.enums.UserState;
-import com.petproject.model.ChatCommand;
+import com.petproject.model.enums.ChatCommand;
 import com.petproject.service.AppUserService;
 import com.petproject.service.ProducerService;
 import com.petproject.service.TextUpdateService;
@@ -12,28 +11,24 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
-
-import java.util.Optional;
 
 import static com.petproject.entity.enums.UserState.BASIC_STATE;
 import static com.petproject.entity.enums.UserState.WAIT_FOR_EMAIL_STATE;
-import static com.petproject.model.ChatCommand.CANSEL;
-import static com.petproject.model.ChatCommand.HELP;
-import static com.petproject.model.ChatCommand.REGISTRATION;
-import static com.petproject.model.ChatCommand.START;
+import static com.petproject.model.enums.ChatCommand.CANSEL;
+import static com.petproject.model.enums.ChatCommand.HELP;
+import static com.petproject.model.enums.ChatCommand.REGISTRATION;
+import static com.petproject.model.enums.ChatCommand.START;
 
 @Service
 @RequiredArgsConstructor
 public class TextUpdateServiceImpl implements TextUpdateService {
     private final ProducerService producerService;
     private final AppUserService appUserService;
-    private final AppUserDao appUserDao;
 
     @Override
     public void processUpdate(Update update) {
         Message message = update.getMessage();
-        AppUser user = findOrCreateUser(message);
+        AppUser user = appUserService.findOrCreateUser(message);
         UserState userState = user.getState();
         String textMessage = message.getText();
         long chatId = message.getChatId();
@@ -86,26 +81,8 @@ public class TextUpdateServiceImpl implements TextUpdateService {
     }
 
     private String processCanselCommand(AppUser user) {
-        user.setState(BASIC_STATE);
-        appUserDao.save(user);
+        appUserService.setBasicState(user);
         return "Комманда отменена";
-    }
-
-    private AppUser findOrCreateUser(Message message) {
-        User telegramUser = message.getFrom();
-        Optional<AppUser> user = appUserDao.findByTelegramUserId(telegramUser.getId());
-        if (user.isEmpty()) {
-            AppUser newUser = AppUser.builder()
-                    .telegramUserId(telegramUser.getId())
-                    .telegramUserName(telegramUser.getUserName())
-                    .firstname(telegramUser.getFirstName())
-                    .lastname(telegramUser.getLastName())
-                    .state(BASIC_STATE)
-                    .isActive(false)
-                    .build();
-            return appUserDao.save(newUser);
-        }
-        return user.get();
     }
 
     private void sendAnswer(String answer, long chatId) {
