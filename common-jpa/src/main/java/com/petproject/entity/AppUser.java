@@ -7,6 +7,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +34,8 @@ public class AppUser {
     private String firstname;
     private String lastname;
     private boolean isActive;
+    private String currentDocId;
+    private String currentDocType;
     @Enumerated(EnumType.STRING)
     private UserState state;
 }

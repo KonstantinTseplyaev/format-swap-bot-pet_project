@@ -1,4 +1,4 @@
-package com.petproject.model;
+package com.petproject.model.enums;
 
 public enum ChatCommand {
     HELP("/help"),
