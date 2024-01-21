@@ -43,6 +43,12 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
+                  name: current_doc_id
+                  type: varchar(200)
+              - column:
+                  name: current_doc_type
+                  type: varchar(200)
+              - column:
                   name: state
                   type: varchar(25)
                   constraints:

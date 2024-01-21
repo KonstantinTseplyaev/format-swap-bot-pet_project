@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import static com.petproject.queue.RabbitQueue.ANSWER_MESSAGE;
+import static com.petproject.queue.RabbitQueue.CALLBACK_MESSAGE_UPDATE;
 import static com.petproject.queue.RabbitQueue.DOCUMENT_MESSAGE_UPDATE;
 import static com.petproject.queue.RabbitQueue.TEXT_MESSAGE_UPDATE;
 
@@ -25,6 +26,11 @@ public class RabbitConfig {
     @Bean
     public Queue DocumentMessageQueue() {
         return new Queue(DOCUMENT_MESSAGE_UPDATE);
+    }
+
+    @Bean
+    public Queue CallbackMessageQueue() {
+        return new Queue(CALLBACK_MESSAGE_UPDATE);
     }
 
     @Bean

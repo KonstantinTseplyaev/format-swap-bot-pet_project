@@ -3,7 +3,8 @@ package com.petproject.model.enums;
 public enum ConvertType {
     MSWORD_DOC("application/msword", ".doc"),
     MSWORD_DOCX("application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"),
-    PDF("application/pdf", ".pdf");
+    PDF("application/pdf", ".pdf"),
+    UNSUPPORTED_TYPE("", "нет подходящего типа");
     private final String value;
 
     private final String typeName;
@@ -21,6 +22,6 @@ public enum ConvertType {
         for (ConvertType type : ConvertType.values()) {
             if (type.value.equals(v)) return type;
         }
-        return null;
+        return UNSUPPORTED_TYPE;
     }
 }

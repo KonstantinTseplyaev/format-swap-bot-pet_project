@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import static com.petproject.queue.RabbitQueue.CALLBACK_MESSAGE_UPDATE;
 import static com.petproject.queue.RabbitQueue.DOCUMENT_MESSAGE_UPDATE;
 import static com.petproject.queue.RabbitQueue.TEXT_MESSAGE_UPDATE;
 
@@ -26,9 +27,16 @@ public class UpdateController {
 
         if (update.getMessage() != null) {
             distributeMessageByType(update);
+        } else if (update.hasCallbackQuery()) {
+            distributeCallback(update);
         } else {
             log.error("Unsupported message type: " + update);
         }
+    }
+
+    private void distributeCallback(Update update) {
+        log.debug("callback data: " + update.getCallbackQuery().getData());
+        updateProducer.produce(CALLBACK_MESSAGE_UPDATE, update);
     }
 
     private void distributeMessageByType(Update update) {
